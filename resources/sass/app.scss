@@ -11,4 +11,29 @@
 .navbar-laravel {
   background-color: $blue;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  height: 2rem;
+}
+
+.btn .feather {
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
+  stroke-width: 1.7;
+}
+
+.feather-phone-call {
+  width: 60px;
+  height: 60px;
+  color: $blue;
+}
+
+a .feather {
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
+  stroke-width: 1.7;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
 }
