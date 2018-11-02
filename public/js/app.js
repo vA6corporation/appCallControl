@@ -377,33 +377,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -510,111 +483,34 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 2 */
+/***/ (function(module, exports) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
+var g;
 
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(24);
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
 
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
 }
 
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(10);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(10);
-  }
-  return adapter;
-}
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
 
-var defaults = {
-  adapter: getDefaultAdapter(),
+module.exports = g;
 
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  /**
-   * A timeout in milliseconds to abort a request. If set to 0 (default) a
-   * timeout is not created.
-   */
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /*
@@ -696,7 +592,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -922,6 +818,110 @@ function applyToTag (styleElement, obj) {
   }
 }
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(24);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(10);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(10);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
 /* 6 */
@@ -3462,7 +3462,7 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
 /* 7 */
@@ -14298,7 +14298,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(15);
-module.exports = __webpack_require__(65);
+module.exports = __webpack_require__(75);
 
 
 /***/ }),
@@ -14321,13 +14321,13 @@ __webpack_require__(16);
 window.Vue = __webpack_require__(39);
 
 
-var VueResource = __webpack_require__(60);
+var VueResource = __webpack_require__(65);
 
 Vue.use(VueResource);
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]);
 
-var baseUrl = '/appAgunsa/public';
-// var baseUrl = '/';
+// var baseUrl = '/appAgunsa/public';
+var baseUrl = '/';
 
 Vue.http.options.root = baseUrl;
 Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
@@ -14337,9 +14337,18 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('con
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(62));
+Vue.component('example-component', __webpack_require__(67));
+Vue.component('message', __webpack_require__(70));
 // Vue.component('message', require('./components/message.vue'));
 // Vue.component('typeahead', require('./components/typeahead.vue'));
+
+Vue.mixin({
+  methods: {
+    showMessage: function showMessage(message) {
+      this.$root.$emit('message', message);
+    }
+  }
+});
 
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
   base: baseUrl,
@@ -31533,7 +31542,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(18)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(18)(module)))
 
 /***/ }),
 /* 18 */
@@ -35529,7 +35538,7 @@ module.exports = __webpack_require__(21);
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(8);
 var Axios = __webpack_require__(23);
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(5);
 
 /**
  * Create an instance of Axios
@@ -35612,7 +35621,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(5);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(32);
 var dispatchRequest = __webpack_require__(33);
@@ -36151,7 +36160,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(34);
 var isCancel = __webpack_require__(12);
-var defaults = __webpack_require__(3);
+var defaults = __webpack_require__(5);
 var isAbsoluteURL = __webpack_require__(35);
 var combineURLs = __webpack_require__(36);
 
@@ -47365,7 +47374,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(40).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(40).setImmediate))
 
 /***/ }),
 /* 40 */
@@ -47435,7 +47444,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 41 */
@@ -47628,7 +47637,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(9)))
 
 /***/ }),
 /* 42 */
@@ -50266,7 +50275,7 @@ if (inBrowser && window.Vue) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return routes; });
-var routes = [{ path: '/callControl', component: __webpack_require__(44) }, { path: '/business', component: __webpack_require__(50) }, { path: '/business/create', component: __webpack_require__(55) }, { path: '/home', component: __webpack_require__(69) }];
+var routes = [{ path: '/callControl', component: __webpack_require__(44) }, { path: '/business', component: __webpack_require__(50) }, { path: '/business/create', component: __webpack_require__(55) }, { path: '/home', component: __webpack_require__(60) }];
 
 /***/ }),
 /* 44 */
@@ -50277,7 +50286,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(45)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(48)
 /* template */
@@ -50330,7 +50339,7 @@ var content = __webpack_require__(46);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("22479396", content, false, {});
+var update = __webpack_require__(4)("22479396", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -50349,12 +50358,12 @@ if(false) {
 /* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -50995,8 +51004,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$http.get('businesses').then(function (response) {
+      console.log(response);
+      _this.businesses = response.body;
+    }, function (response) {
+      console.log(response);
+    });
+  },
+  data: function data() {
+    return {
+      businesses: [],
+      currentBusiness: {}
+    };
+  },
+
+  methods: {
+    setBusiness: function setBusiness(el, business) {
+      console.log(business);
+      this.currentBusiness = business;
+      $('.active').removeClass('active');
+      $(el).addClass('active');
+    }
+  }
+});
 
 /***/ }),
 /* 49 */
@@ -51018,24 +51059,143 @@ var render = function() {
       _vm._v(" "),
       _vm._m(4),
       _vm._v(" "),
-      _c("ul", { staticClass: "list-group" }, [
-        _c(
-          "li",
-          { staticClass: "list-group-item d-flex justify-content-between" },
-          [
-            _vm._v("\n        Empresas\n        "),
-            _c(
-              "router-link",
-              { attrs: { to: "/business/create", href: "#" } },
-              [_vm._v("Nuevo "), _c("i", { attrs: { "data-feather": "plus" } })]
+      _c(
+        "ul",
+        { staticClass: "list-group" },
+        [
+          _c(
+            "li",
+            { staticClass: "list-group-item d-flex justify-content-between" },
+            [
+              _vm._v("\n        Empresas\n        "),
+              _c(
+                "router-link",
+                { attrs: { to: "/business/create", href: "#" } },
+                [
+                  _vm._v("Nuevo "),
+                  _c("i", { attrs: { "data-feather": "plus" } })
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.businesses, function(item, index) {
+            return _c(
+              "a",
+              {
+                staticClass: "list-group-item list-group-item-action",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.setBusiness($event.target, item)
+                  }
+                }
+              },
+              [_vm._v("\n        " + _vm._s(item.name) + "\n      ")]
             )
-          ],
-          1
-        )
-      ])
+          })
+        ],
+        2
+      )
     ]),
     _vm._v(" "),
-    _vm._m(5)
+    _c("div", { staticClass: "col-9" }, [
+      _c("div", { staticClass: "card form-group shadow-sm" }, [
+        _c("div", { staticClass: "card-body" }, [
+          _vm._m(5),
+          _vm._v(" "),
+          _vm._m(6),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-row" }, [
+            _c("div", { staticClass: "col-12 form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.currentBusiness.name,
+                    expression: "currentBusiness.name"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Empresa" },
+                domProps: { value: _vm.currentBusiness.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.currentBusiness, "name", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-6" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.currentBusiness.telephone,
+                    expression: "currentBusiness.telephone"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Telefonos" },
+                domProps: { value: _vm.currentBusiness.telephone },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.currentBusiness,
+                      "telephone",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-6" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.currentBusiness.date,
+                    expression: "currentBusiness.date"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Dato" },
+                domProps: { value: _vm.currentBusiness.date },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.currentBusiness, "date", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(7),
+      _vm._v(" "),
+      _vm._m(8),
+      _vm._v(" "),
+      _vm._m(9),
+      _vm._v(" "),
+      _vm._m(10)
+    ])
   ])
 }
 var staticRenderFns = [
@@ -51101,141 +51261,905 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-9" }, [
-      _c("div", { staticClass: "card form-group shadow-sm" }, [
-        _c("div", { staticClass: "card-body" }, [
-          _c("div", { staticClass: "d-flex justify-content-between" }, [
-            _c("h5", { staticClass: "card-title" }, [_vm._v("Empresa")]),
+    return _c("div", { staticClass: "d-flex justify-content-between" }, [
+      _c("h5", { staticClass: "card-title" }, [_vm._v("Empresa")]),
+      _vm._v(" "),
+      _c("div", {}, [
+        _c("a", { attrs: { href: "#" } }, [
+          _vm._v("Guardar "),
+          _c("i", { attrs: { "data-feather": "save" } })
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row form-group" }, [
+      _c("div", { staticClass: "col-3" }, [
+        _c("select", { staticClass: "custom-select" }, [
+          _c("option", { attrs: { value: "" } }, [_vm._v("Ubicacion")])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c("select", { staticClass: "custom-select" }, [
+          _c("option", { attrs: { value: "" } }, [_vm._v("Tipo de Empresa")])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "select",
+          { staticClass: "custom-select", attrs: { name: "", id: "" } },
+          [_c("option", { attrs: { value: "" } }, [_vm._v("Rubro de empresa")])]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-3" }, [
+        _c(
+          "select",
+          { staticClass: "custom-select", attrs: { name: "", id: "" } },
+          [_c("option", { attrs: { value: "" } }, [_vm._v("Seleccion")])]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row form-group" }, [
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("h5", { staticClass: "card-title" }, [_vm._v("Contacto 1")]),
             _vm._v(" "),
-            _c("div", {}, [
-              _c("a", { attrs: { href: "#" } }, [
-                _vm._v("Guardar "),
-                _c("i", { attrs: { "data-feather": "save" } })
-              ])
-            ])
+            _c("input", {
+              staticClass: "form-control form-group",
+              attrs: { type: "text", placeholder: "Contacto" }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control form-group",
+              attrs: { type: "text", placeholder: "Cargo" }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Correo" }
+            })
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("h5", { staticClass: "card-title" }, [_vm._v("Contacto 2")]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control form-group",
+              attrs: { type: "text", placeholder: "Contacto" }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control form-group",
+              attrs: { type: "text", placeholder: "Cargo" }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Correo" }
+            })
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row form-group" }, [
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n            Salud Ocupacional\n          ")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-row form-group" }, [
-            _c("div", { staticClass: "col-3" }, [
-              _c("select", { staticClass: "custom-select" }, [
-                _c("option", { attrs: { value: "" } }, [_vm._v("Ubicacion")])
-              ])
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c("span", { staticClass: "input-group-text" }, [
+                  _vm._v("Brochure Enviado")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text" }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text" }
+              })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-3" }, [
-              _c("select", { staticClass: "custom-select" }, [
-                _c("option", { attrs: { value: "" } }, [
-                  _vm._v("Tipo de Empresa")
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "col-3" }, [
+                _c("div", { staticClass: "card border-light" }, [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("i", { attrs: { "data-feather": "phone-call" } })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-9 p-3" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-4" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Ausentes")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Posibles")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
                 ])
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-3" }, [
-              _c(
-                "select",
-                { staticClass: "custom-select", attrs: { name: "", id: "" } },
-                [
-                  _c("option", { attrs: { value: "" } }, [
-                    _vm._v("Rubro de empresa")
+            _c("div", { staticClass: "form-row form-group" }, [
+              _c("div", { staticClass: "input-group" }, [
+                _c("div", { staticClass: "input-group-prepend" }, [
+                  _c("span", { staticClass: "input-group-text" }, [
+                    _vm._v("Programas LLamada")
                   ])
-                ]
-              )
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                })
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-3" }, [
-              _c(
-                "select",
-                { staticClass: "custom-select", attrs: { name: "", id: "" } },
-                [_c("option", { attrs: { value: "" } }, [_vm._v("Seleccion")])]
-              )
+            _c("div", { staticClass: "form-row" }, [
+              _c("textarea", {
+                staticClass: "form-control",
+                attrs: { rows: "2", placeholder: "Comentario" }
+              })
             ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n            ETAS y Carnet de Sanidad\n          ")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-row" }, [
-            _c("div", { staticClass: "col-12 form-group" }, [
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c("span", { staticClass: "input-group-text" }, [
+                  _vm._v("Brochure Enviado")
+                ])
+              ]),
+              _vm._v(" "),
               _c("input", {
                 staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Empresa" }
+                attrs: { type: "text" }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text" }
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "col-3" }, [
+                _c("div", { staticClass: "card border-light" }, [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("i", { attrs: { "data-feather": "phone-call" } })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-9 p-3" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-4" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Ausentes")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Posibles")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row form-group" }, [
+              _c("div", { staticClass: "input-group" }, [
+                _c("div", { staticClass: "input-group-prepend" }, [
+                  _c("span", { staticClass: "input-group-text" }, [
+                    _vm._v("Programas LLamada")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _c("textarea", {
+                staticClass: "form-control",
+                attrs: { rows: "2", placeholder: "Comentario" }
+              })
+            ])
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row form-group" }, [
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n            Salud Ocupacional\n          ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c("span", { staticClass: "input-group-text" }, [
+                  _vm._v("Brochure Enviado")
+                ])
+              ]),
+              _vm._v(" "),
               _c("input", {
                 staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Telefonos" }
+                attrs: { type: "text" }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text" }
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-6" }, [
-              _c("input", {
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "col-3" }, [
+                _c("div", { staticClass: "card border-light" }, [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("i", { attrs: { "data-feather": "phone-call" } })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-9 p-3" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-4" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Ausentes")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Posibles")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row form-group" }, [
+              _c("div", { staticClass: "input-group" }, [
+                _c("div", { staticClass: "input-group-prepend" }, [
+                  _c("span", { staticClass: "input-group-text" }, [
+                    _vm._v("Programas LLamada")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _c("textarea", {
                 staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Dato" }
+                attrs: { rows: "2", placeholder: "Comentario" }
               })
             ])
           ])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "form-row form-group" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("h5", { staticClass: "card-title" }, [_vm._v("Contacto 1")]),
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n            ETAS y Carnet de Sanidad\n          ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c("span", { staticClass: "input-group-text" }, [
+                  _vm._v("Brochure Enviado")
+                ])
+              ]),
               _vm._v(" "),
               _c("input", {
-                staticClass: "form-control form-group",
-                attrs: { type: "text", placeholder: "Contacto" }
-              }),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control form-group",
-                attrs: { type: "text", placeholder: "Cargo" }
+                staticClass: "form-control",
+                attrs: { type: "text" }
               }),
               _vm._v(" "),
               _c("input", {
                 staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Correo" }
+                attrs: { type: "text" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "col-3" }, [
+                _c("div", { staticClass: "card border-light" }, [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("i", { attrs: { "data-feather": "phone-call" } })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-9 p-3" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-4" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Ausentes")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Posibles")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row form-group" }, [
+              _c("div", { staticClass: "input-group" }, [
+                _c("div", { staticClass: "input-group-prepend" }, [
+                  _c("span", { staticClass: "input-group-text" }, [
+                    _vm._v("Programas LLamada")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _c("textarea", {
+                staticClass: "form-control",
+                attrs: { rows: "2", placeholder: "Comentario" }
               })
             ])
           ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("h5", { staticClass: "card-title" }, [_vm._v("Contacto 2")]),
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row form-group" }, [
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n            Salud Ocupacional\n          ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c("span", { staticClass: "input-group-text" }, [
+                  _vm._v("Brochure Enviado")
+                ])
+              ]),
               _vm._v(" "),
               _c("input", {
-                staticClass: "form-control form-group",
-                attrs: { type: "text", placeholder: "Contacto" }
-              }),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control form-group",
-                attrs: { type: "text", placeholder: "Cargo" }
+                staticClass: "form-control",
+                attrs: { type: "text" }
               }),
               _vm._v(" "),
               _c("input", {
                 staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Correo" }
+                attrs: { type: "text" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "col-3" }, [
+                _c("div", { staticClass: "card border-light" }, [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("i", { attrs: { "data-feather": "phone-call" } })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-9 p-3" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-4" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Ausentes")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Posibles")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row form-group" }, [
+              _c("div", { staticClass: "input-group" }, [
+                _c("div", { staticClass: "input-group-prepend" }, [
+                  _c("span", { staticClass: "input-group-text" }, [
+                    _vm._v("Programas LLamada")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: { type: "text" }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row" }, [
+              _c("textarea", {
+                staticClass: "form-control",
+                attrs: { rows: "2", placeholder: "Comentario" }
               })
             ])
           ])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "form-row form-group" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("\n            Salud Ocupacional\n          ")
+      _c("div", { staticClass: "col-6" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n            ETAS y Carnet de Sanidad\n          ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "input-group" }, [
+              _c("div", { staticClass: "input-group-prepend" }, [
+                _c("span", { staticClass: "input-group-text" }, [
+                  _vm._v("Brochure Enviado")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text" }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "text" }
+              })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "col-3" }, [
+                _c("div", { staticClass: "card border-light" }, [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("i", { attrs: { "data-feather": "phone-call" } })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-9 p-3" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-4" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Ausentes")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "d-flex justify-content-between" }, [
+                  _c("span", [_vm._v("Posibles")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-row" }, [
+                    _c("div", { staticClass: "col-6 morning" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 late" }, [
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } }),
+                      _vm._v(" "),
+                      _c("input", { attrs: { type: "checkbox" } })
+                    ])
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-row form-group" }, [
               _c("div", { staticClass: "input-group" }, [
                 _c("div", { staticClass: "input-group-prepend" }, [
                   _c("span", { staticClass: "input-group-text" }, [
-                    _vm._v("Brochure Enviado")
+                    _vm._v("Programas LLamada")
                   ])
                 ]),
                 _vm._v(" "),
@@ -51248,793 +52172,14 @@ var staticRenderFns = [
                   staticClass: "form-control",
                   attrs: { type: "text" }
                 })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("div", { staticClass: "col-3" }, [
-                  _c("div", { staticClass: "card border-light" }, [
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("i", { attrs: { "data-feather": "phone-call" } })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-9 p-3" }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-4" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Ausentes")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Posibles")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row form-group" }, [
-                _c("div", { staticClass: "input-group" }, [
-                  _c("div", { staticClass: "input-group-prepend" }, [
-                    _c("span", { staticClass: "input-group-text" }, [
-                      _vm._v("Programas LLamada")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("textarea", {
-                  staticClass: "form-control",
-                  attrs: { rows: "2", placeholder: "Comentario" }
-                })
               ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("\n            ETAS y Carnet de Sanidad\n          ")
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c("div", { staticClass: "input-group-prepend" }, [
-                  _c("span", { staticClass: "input-group-text" }, [
-                    _vm._v("Brochure Enviado")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("div", { staticClass: "col-3" }, [
-                  _c("div", { staticClass: "card border-light" }, [
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("i", { attrs: { "data-feather": "phone-call" } })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-9 p-3" }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-4" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Ausentes")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Posibles")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row form-group" }, [
-                _c("div", { staticClass: "input-group" }, [
-                  _c("div", { staticClass: "input-group-prepend" }, [
-                    _c("span", { staticClass: "input-group-text" }, [
-                      _vm._v("Programas LLamada")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("textarea", {
-                  staticClass: "form-control",
-                  attrs: { rows: "2", placeholder: "Comentario" }
-                })
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-row form-group" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("\n            Salud Ocupacional\n          ")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c("div", { staticClass: "input-group-prepend" }, [
-                  _c("span", { staticClass: "input-group-text" }, [
-                    _vm._v("Brochure Enviado")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("div", { staticClass: "col-3" }, [
-                  _c("div", { staticClass: "card border-light" }, [
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("i", { attrs: { "data-feather": "phone-call" } })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-9 p-3" }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-4" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Ausentes")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Posibles")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row form-group" }, [
-                _c("div", { staticClass: "input-group" }, [
-                  _c("div", { staticClass: "input-group-prepend" }, [
-                    _c("span", { staticClass: "input-group-text" }, [
-                      _vm._v("Programas LLamada")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("textarea", {
-                  staticClass: "form-control",
-                  attrs: { rows: "2", placeholder: "Comentario" }
-                })
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("\n            ETAS y Carnet de Sanidad\n          ")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c("div", { staticClass: "input-group-prepend" }, [
-                  _c("span", { staticClass: "input-group-text" }, [
-                    _vm._v("Brochure Enviado")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("div", { staticClass: "col-3" }, [
-                  _c("div", { staticClass: "card border-light" }, [
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("i", { attrs: { "data-feather": "phone-call" } })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-9 p-3" }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-4" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Ausentes")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Posibles")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row form-group" }, [
-                _c("div", { staticClass: "input-group" }, [
-                  _c("div", { staticClass: "input-group-prepend" }, [
-                    _c("span", { staticClass: "input-group-text" }, [
-                      _vm._v("Programas LLamada")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("textarea", {
-                  staticClass: "form-control",
-                  attrs: { rows: "2", placeholder: "Comentario" }
-                })
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-row form-group" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("\n            Salud Ocupacional\n          ")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c("div", { staticClass: "input-group-prepend" }, [
-                  _c("span", { staticClass: "input-group-text" }, [
-                    _vm._v("Brochure Enviado")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("div", { staticClass: "col-3" }, [
-                  _c("div", { staticClass: "card border-light" }, [
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("i", { attrs: { "data-feather": "phone-call" } })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-9 p-3" }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-4" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Ausentes")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Posibles")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row form-group" }, [
-                _c("div", { staticClass: "input-group" }, [
-                  _c("div", { staticClass: "input-group-prepend" }, [
-                    _c("span", { staticClass: "input-group-text" }, [
-                      _vm._v("Programas LLamada")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("textarea", {
-                  staticClass: "form-control",
-                  attrs: { rows: "2", placeholder: "Comentario" }
-                })
-              ])
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-6" }, [
-          _c("div", { staticClass: "card shadow-sm" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("\n            ETAS y Carnet de Sanidad\n          ")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "input-group" }, [
-                _c("div", { staticClass: "input-group-prepend" }, [
-                  _c("span", { staticClass: "input-group-text" }, [
-                    _vm._v("Brochure Enviado")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                }),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "text" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("div", { staticClass: "col-3" }, [
-                  _c("div", { staticClass: "card border-light" }, [
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("i", { attrs: { "data-feather": "phone-call" } })
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-9 p-3" }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-4" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Mañana")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-4" }, [_vm._v("Tarde")])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Ausentes")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "d-flex justify-content-between" }, [
-                    _c("span", [_vm._v("Posibles")]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-row" }, [
-                      _c("div", { staticClass: "col-6 morning" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-6 late" }, [
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } }),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "checkbox" } })
-                      ])
-                    ])
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row form-group" }, [
-                _c("div", { staticClass: "input-group" }, [
-                  _c("div", { staticClass: "input-group-prepend" }, [
-                    _c("span", { staticClass: "input-group-text" }, [
-                      _vm._v("Programas LLamada")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text" }
-                  })
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [
-                _c("textarea", {
-                  staticClass: "form-control",
-                  attrs: { rows: "2", placeholder: "Comentario" }
-                })
-              ])
+            _c("div", { staticClass: "form-row" }, [
+              _c("textarea", {
+                staticClass: "form-control",
+                attrs: { rows: "2", placeholder: "Comentario" }
+              })
             ])
           ])
         ])
@@ -52060,7 +52205,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(51)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(53)
 /* template */
@@ -52113,7 +52258,7 @@ var content = __webpack_require__(52);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("f0f2dfe6", content, false, {});
+var update = __webpack_require__(4)("f0f2dfe6", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -52132,7 +52277,7 @@ if(false) {
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
@@ -52278,7 +52423,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(56)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(58)
 /* template */
@@ -52331,7 +52476,7 @@ var content = __webpack_require__(57);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("1e1baa42", content, false, {});
+var update = __webpack_require__(4)("1e1baa42", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -52350,12 +52495,12 @@ if(false) {
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -52413,6 +52558,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -52423,20 +52584,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    getExcel: function getExcel() {
+    submit: function submit() {
       var _this = this;
+
+      console.log('hola mundo');
+      this.$http.post('businesses', { businesses: this.businesses }).then(function (response) {
+        console.log(response);
+        _this.businesses = [];
+        _this.showMessage('Empresas registradas correctamente');
+      }, function (response) {
+        console.log(response);
+      });
+    },
+    getExcel: function getExcel() {
+      var _this2 = this;
 
       var rows = this.stringExcel.split('\n');
       rows.forEach(function (item) {
         var data = item.split('\t');
         var business = {
-          empresa: data[0],
-          empleados: data[1],
-          telefono: data[2],
-          dato: data[3]
+          name: data[0],
+          employees: data[1],
+          telephone: data[2],
+          date: data[3]
         };
-        _this.businesses.push(business);
+        console.log(business);
+        if (business.name) {
+          _this2.businesses.push(business);
+        }
       });
+      this.stringExcel = '';
     }
   }
 });
@@ -52501,17 +52678,48 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-12" }, [
       _c("div", { staticClass: "card p-3 shadow-sm" }, [
-        _vm._m(5),
-        _vm._v(" "),
         _c(
-          "ul",
-          { staticClass: "list-group list-group-item-flush" },
-          _vm._l(_vm.businesses, function(item, index) {
-            return _c("li", { staticClass: "list-group-item" }, [
-              _vm._v(_vm._s(item.empresa))
-            ])
-          })
-        )
+          "div",
+          { staticClass: "d-flex justify-content-between form-group" },
+          [
+            _c("span", { staticClass: "lead" }, [_vm._v("Lista de Empresas")]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    _vm.submit()
+                  }
+                }
+              },
+              [
+                _vm._v(" Subir\n          "),
+                _c("i", { attrs: { "data-feather": "arrow-up" } })
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("table", { staticClass: "table table-striped table-bordered" }, [
+          _vm._m(5),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.businesses, function(item, index) {
+              return _c("tr", [
+                _c("td", [_vm._v(_vm._s(item.name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(item.employees))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(item.telephone))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(item.date))])
+              ])
+            })
+          )
+        ])
       ])
     ])
   ])
@@ -52580,18 +52788,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "d-flex justify-content-between form-group" },
-      [
-        _c("span", { staticClass: "lead" }, [_vm._v("Lista de Empresas")]),
-        _vm._v(" "),
-        _c("a", { attrs: { href: "#" } }, [
-          _vm._v(" Subir\n          "),
-          _c("i", { attrs: { "data-feather": "arrow-up" } })
-        ])
-      ]
-    )
+    return _c("thead", [
+      _c("th", [_vm._v("Empresa")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Trabajadores")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Telefonos")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Dato")])
+    ])
   }
 ]
 render._withStripped = true
@@ -52605,6 +52810,156 @@ if (false) {
 
 /***/ }),
 /* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(61)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(63)
+/* template */
+var __vue_template__ = __webpack_require__(64)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/Home.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f2b6376c", Component.options)
+  } else {
+    hotAPI.reload("data-v-f2b6376c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(62);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("7d042666", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2b6376c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Home.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2b6376c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Home.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "card shadow-sm" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Dashboard")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _vm._v("\n        Has ingresado correctamente!\n      ")
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-f2b6376c", module.exports)
+  }
+}
+
+/***/ }),
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53703,7 +54058,7 @@ function xhrClient (request) {
 
 function nodeClient (request) {
 
-    var client = __webpack_require__(61);
+    var client = __webpack_require__(66);
 
     return new PromiseObj(function (resolve) {
 
@@ -54171,21 +54526,21 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 /***/ }),
-/* 61 */
+/* 66 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 62 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(63)
+var __vue_script__ = __webpack_require__(68)
 /* template */
-var __vue_template__ = __webpack_require__(64)
+var __vue_template__ = __webpack_require__(69)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -54224,7 +54579,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54253,7 +54608,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 64 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -54296,28 +54651,19 @@ if (false) {
 }
 
 /***/ }),
-/* 65 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(70)
+  __webpack_require__(71)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(72)
+var __vue_script__ = __webpack_require__(73)
 /* template */
-var __vue_template__ = __webpack_require__(73)
+var __vue_template__ = __webpack_require__(74)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -54334,7 +54680,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/js/components/Home.vue"
+Component.options.__file = "resources/js/components/Message.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -54343,9 +54689,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-f2b6376c", Component.options)
+    hotAPI.createRecord("data-v-b91a6428", Component.options)
   } else {
-    hotAPI.reload("data-v-f2b6376c", Component.options)
+    hotAPI.reload("data-v-b91a6428", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -54356,23 +54702,23 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(71);
+var content = __webpack_require__(72);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(5)("7d042666", content, false, {});
+var update = __webpack_require__(4)("7265cf72", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2b6376c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Home.vue", function() {
-     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-f2b6376c\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Home.vue");
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b91a6428\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Message.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-b91a6428\",\"scoped\":false,\"hasInlineConfig\":true}!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Message.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -54382,21 +54728,21 @@ if(false) {
 }
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(false);
+exports = module.exports = __webpack_require__(3)(false);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54414,34 +54760,95 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    var _this = this;
+
+    this.$root.$on('message', function (message) {
+      _this.message = message;
+      $('#messageModal').modal('show');
+    });
+  },
+  data: function data() {
+    return {
+      message: ''
+    };
+  }
+});
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: { id: "messageModal", tabindex: "-1", role: "dialog" }
+    },
+    [
+      _c("div", { staticClass: "modal-dialog", attrs: { role: "document" } }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-body" }, [
+            _c("p", [_vm._v(_vm._s(_vm.message) + ".")])
+          ]),
+          _vm._v(" "),
+          _vm._m(1)
+        ])
+      ])
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "card shadow-sm" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Dashboard")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _vm._v("\n        Has ingresado correctamente!\n      ")
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Mensaje")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-info",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Aceptar")]
+      )
     ])
   }
 ]
@@ -54450,9 +54857,15 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-f2b6376c", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-b91a6428", module.exports)
   }
 }
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

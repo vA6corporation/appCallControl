@@ -15,8 +15,8 @@ var VueResource = require('vue-resource');
 Vue.use(VueResource);
 Vue.use(VueRouter);
 
-var baseUrl = '/appAgunsa/public';
-// var baseUrl = '/';
+// var baseUrl = '/appAgunsa/public';
+var baseUrl = '/';
 
 Vue.http.options.root = baseUrl;
 Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('content');
@@ -27,8 +27,18 @@ Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr('con
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('message', require('./components/Message.vue'));
 // Vue.component('message', require('./components/message.vue'));
 // Vue.component('typeahead', require('./components/typeahead.vue'));
+
+Vue.mixin({
+  methods: {
+    showMessage(message) {
+      this.$root.$emit('message', message);
+    }
+  }
+})
+
 
 const router = new VueRouter({
   base: baseUrl,

@@ -17,6 +17,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::resources([
+  'businesses' => 'BusinessController'
+  // 'posts' => 'PostController'
+]);
+
 Route::get('/{vue_capture?}', function () {
   // return null;
   return view('home');

@@ -33,13 +33,29 @@
       <div class="card p-3 shadow-sm">
         <div class="d-flex justify-content-between form-group">
           <span class="lead">Lista de Empresas</span>
-          <a href='#'> Subir
+          <a href='#' @click='submit()'> Subir
             <i data-feather='arrow-up'></i>
           </a>
         </div>
-        <ul class="list-group list-group-item-flush">
-          <li class="list-group-item" v-for='(item, index) in businesses'>{{ item.empresa }}</li>
-        </ul>
+        <table class="table table-striped table-bordered">
+          <thead>
+            <th>Empresa</th>
+            <th>Trabajadores</th>
+            <th>Telefonos</th>
+            <th>Dato</th>
+          </thead>
+          <tbody>
+            <tr v-for='(item, index) in businesses'>
+              <td>{{ item.name }}</td>
+              <td>{{ item.employees }}</td>
+              <td>{{ item.telephone }}</td>
+              <td>{{ item.date }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <ul class="list-group list-group-item-flush">
+          <li class="list-group-item" v-for='(item, index) in businesses'>{{ item.name }}</li>
+        </ul> -->
       </div>
     </div>
   </div>
@@ -54,18 +70,32 @@ export default {
     }
   },
   methods: {
+    submit() {
+      console.log('hola mundo');
+      this.$http.post('businesses', {businesses: this.businesses}).then(response => {
+        console.log(response);
+        this.businesses =  [];
+        this.showMessage('Empresas registradas correctamente');
+      }, response => {
+        console.log(response);
+      });
+    },
     getExcel() {
       var rows = this.stringExcel.split('\n');
       rows.forEach(item => {
         var data = item.split('\t');
         var business = {
-          empresa: data[0],
-          empleados: data[1],
-          telefono: data[2],
-          dato: data[3],
+          name: data[0],
+          employees: data[1],
+          telephone: data[2],
+          date: data[3],
         }
-        this.businesses.push(business);
+        console.log(business);
+        if (business.name) {
+          this.businesses.push(business);
+        }
       })
+      this.stringExcel = '';
     }
   }
 }

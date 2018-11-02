@@ -21,6 +21,12 @@
           Empresas
           <router-link to='/business/create' href='#'>Nuevo <i data-feather='plus'></i> </router-link>
         </li>
+        <a
+          v-for='(item, index) in businesses'
+          class="list-group-item list-group-item-action"
+          href='#' @click.prevent='setBusiness($event.target, item)'>
+          {{ item.name }}
+        </a>
       </ul>
     </div>
     <div class="col-9">
@@ -56,13 +62,13 @@
           </div>
           <div class="form-row">
             <div class="col-12 form-group">
-              <input type="text" class="form-control" placeholder="Empresa">
+              <input type="text" class="form-control" v-model='currentBusiness.name' placeholder="Empresa">
             </div>
             <div class="col-6">
-              <input type="text" class="form-control" placeholder="Telefonos">
+              <input type="text" class="form-control" v-model='currentBusiness.telephone' placeholder="Telefonos">
             </div>
             <div class="col-6">
-              <input type="text" class="form-control" placeholder="Dato">
+              <input type="text" class="form-control" v-model='currentBusiness.date' placeholder="Dato">
             </div>
           </div>
         </div>
@@ -597,7 +603,28 @@
 
 <script>
 export default {
-
+  mounted() {
+    this.$http.get('businesses').then(response => {
+      console.log(response);
+      this.businesses = response.body;
+    }, response => {
+      console.log(response);
+    });
+  },
+  data() {
+    return {
+      businesses: [],
+      currentBusiness: {},
+    }
+  },
+  methods: {
+    setBusiness(el, business) {
+      console.log(business);
+      this.currentBusiness =  business;
+      $('.active').removeClass('active');
+      $(el).addClass('active');
+    }
+  }
 }
 </script>
 

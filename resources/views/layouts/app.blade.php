@@ -78,12 +78,14 @@
     </div>
   </nav>
 
+
   <main class="py-3">
     <div class="container-fluid">
       <router-view></router-view>
       @yield('content')
     </div>
   </main>
+  <message></message>
 </div>
 </body>
 </html>
