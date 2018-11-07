@@ -3,6 +3,7 @@
     <div class="col-3">
       <select class="custom-select form-group" name="">
         <option value="">Todas las Ubicacion</option>
+        <option :value="item.id" v-for='(item, index) in places'>{{ item.nombre }}</option>
       </select>
       <select class="custom-select form-group" name="">
         <option value="">Todos los Tipos de empresa</option>
@@ -42,6 +43,7 @@
             <div class="col-3">
               <select class="custom-select">
                 <option value="">Ubicacion</option>
+                <option :value="item.id" v-for='(item, index) in places'>{{ item.nombre }}</option>
               </select>
             </div>
             <div class="col-3">
@@ -610,10 +612,17 @@ export default {
     }, response => {
       console.log(response);
     });
+    this.$http.get('places').then(response => {
+      console.log(response);
+      this.places = response.body.places;
+    }, response => {
+      console.log(response);
+    });
   },
   data() {
     return {
       businesses: [],
+      places: [],
       currentBusiness: {},
     }
   },

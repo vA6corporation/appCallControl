@@ -3,6 +3,7 @@ export const routes = [
   {path: '/business', component: require('./components/business/index.vue')},
   {path: '/business/create', component: require('./components/business/Create.vue')},
   {path: '/home', component: require('./components/Home.vue')},
+  {path: '/maintenance', component: require('./views/maintenance')},
   // {path: '/business/create', component: require('./components/business/create.vue')},
   // {path: '/business/:id/edit', component: require('./components/business/edit.vue')},
   // {path: '/customer', component: require('./components/customer')},

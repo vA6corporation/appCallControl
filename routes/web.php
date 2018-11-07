@@ -17,9 +17,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::post('/maintenance/storePlace/{place}', 'MaintenanceController@storePlace');
+Route::post('/maintenance/storeType/{type}', 'MaintenanceController@storeType');
+Route::post('/maintenance/storeSelection/{selection}', 'MaintenanceController@storeSelection');
+
 Route::resources([
-  'businesses' => 'BusinessController'
-  // 'posts' => 'PostController'
+  'businesses' => 'BusinessController',
 ]);
 
 Route::get('/{vue_capture?}', function () {

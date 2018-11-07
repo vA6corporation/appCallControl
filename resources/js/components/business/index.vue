@@ -14,17 +14,17 @@
         <div class="col-12">
           <table class="table table-striped table-bordered table-sm">
             <thead>
-              <th>Empresa</th>
+              <th>Nombre</th>
               <th>Empleados</th>
               <th>Telefono</th>
               <th>Dato</th>
             </thead>
             <tbody>
-              <tr>
-                <td>texto</td>
-                <td>texto</td>
-                <td>texto</td>
-                <td>texto</td>
+              <tr v-for='(item, index) in businesses'>
+                <td>{{ item.name }}</td>
+                <td>{{ item.employees }}</td>
+                <td>{{ item.telephone }}</td>
+                <td>{{ item.date }}</td>
               </tr>
             </tbody>
           </table>
@@ -37,7 +37,17 @@
 
 <script>
 export default {
-
+  mounted() {
+    this.$http.get('businesses').then(response => {
+      this.businesses = response.body;
+      console.log(response);
+    })
+  },
+  data() {
+    return {
+      businesses: []
+    }
+  }
 }
 </script>
 
